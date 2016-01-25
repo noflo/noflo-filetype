@@ -13,6 +13,9 @@ exports.getComponent = ->
 
   c.outPorts.add 'out',
     datatype: 'string'
+  c.outPorts.add 'error',
+    datatype: 'object'
+    required: false
 
   noflo.helpers.WirePattern c,
     in: 'in'
@@ -21,6 +24,8 @@ exports.getComponent = ->
     async: true
   , (data, groups, out, callback) ->
     type = fileType data
+    unless type
+      return callback new Error 'Unsupported file-type'
     out.send type.mime
     do callback
 
