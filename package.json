@@ -40,5 +40,10 @@
   "keywords": [
     "noflo",
     "ecosystem:noflo"
-  ]
+  ],
+  "noflo": {
+    "components": {
+      "DetectFiletype": "components/DetectFiletype.coffee"
+    }
+  }
 }
