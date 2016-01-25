@@ -4,8 +4,7 @@
   "author": "Vilson Vieira <vilson@void.cc>",
   "repo": "vilson/noflo-filetype",
   "version": "0.1.0",
-  "keywords": [
-  ],
+  "keywords": [],
   "dependencies": {
     "noflo/noflo": "*"
   },
@@ -13,6 +12,15 @@
     "https://raw.githubusercontent.com"
   ],
   "scripts": [
-    "index.js"
-  ]
+    "index.js",
+    "components/DetectFiletype.coffee"
+  ],
+  "json": [
+    "component.json"
+  ],
+  "noflo": {
+    "components": {
+      "DetectFiletype": "components/DetectFiletype.coffee"
+    }
+  }
 }
