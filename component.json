@@ -1,6 +1,6 @@
 {
   "name": "noflo-filetype",
-  "description": "NoFlo components to detect file type checking magic number.",
+  "description": "NoFlo components to detect file type by checking magic number.",
   "author": "Vilson Vieira <vilson@void.cc>",
   "repo": "vilson/noflo-filetype",
   "version": "0.1.0",
