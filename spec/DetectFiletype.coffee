@@ -68,8 +68,55 @@ describe 'DetectFiletype component', ->
     describe 'of a file with unsupported file type', ->
       it 'should fail with a valid error', (done) ->
         err.on 'data', (data) ->
-          chai.expect(data).to.be.deep.equal new Error 'Unsupported file-type'
+          chai.expect(data).to.be.deep.equal new Error 'Unsupported file type'
           done()
         testutils.getBuffer __dirname + '/testutils.coffee', (buffer) ->
           ins.send buffer
+
+  describe 'when passed a filepath', ->
+    @timeout 5000
+    describe 'of a JPG file', ->
+      it 'should detect it has a JPG file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/jpeg'
+          done()
+        ins.send __dirname + '/fixtures/file.jpg'
+    describe 'of a PNG file', ->
+      it 'should detect it has a PNG file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/png'
+          done()
+        ins.send __dirname + '/fixtures/file.png'
+    describe 'of a GIF file', ->
+      it 'should detect it has a GIF file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/gif'
+          done()
+        ins.send __dirname + '/fixtures/file.gif'
+    describe 'of a TIFF file', ->
+      it 'should detect it has a TIFF file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/tiff'
+          done()
+        ins.send __dirname + '/fixtures/file.tif'
+    describe 'of a file without extension', ->
+      it 'should detect it has a valid file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/gif'
+          done()
+        ins.send __dirname + '/fixtures/file'
+    describe 'of a file with unsupported file type', ->
+      it 'should fail with a valid error', (done) ->
+        err.on 'data', (data) ->
+          chai.expect(data).to.be.deep.equal new Error 'Unsupported file type'
+          done()
+        ins.send __dirname + '/testutils.coffee'
+
+  describe 'when passed neither a buffer nor filepath', ->
+    it 'should fail with a valid error', (done) ->
+      err.on 'data', (data) ->
+        chai.expect(data).to.deep.equal new Error 'Input is not filepath nor buffer'
+        done()
+      ins.send 42
+
 
