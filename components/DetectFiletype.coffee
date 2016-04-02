@@ -3,45 +3,34 @@ fileType = require 'file-type'
 readChunk = require 'read-chunk'
 
 exports.getComponent = ->
-  c = new noflo.Component
+  new noflo.Component
+    icon: 'cog'
+    description: 'Detect MIME type of a filepath or buffer checking its magic number'
+    inPorts:
+      in:
+        datatype: 'object'
+    outPorts:
+      out:
+        datatype: 'string'
+      error:
+        datatype: 'object'
+    process: (input, output) ->
+      return unless input.has 'in'
+      data = input.getData 'in'
+      return unless input.ip.type is 'data'
 
-  c.icon = 'cog'
-
-  c.description = 'Detect MIME type of a filepath or buffer checking its magic number'
-
-  c.inPorts.add 'in',
-    datatype: 'object'
-
-  c.outPorts.add 'out',
-    datatype: 'string'
-  c.outPorts.add 'error',
-    datatype: 'object'
-    required: false
-
-  noflo.helpers.WirePattern c,
-    in: 'in'
-    out: 'out'
-    forwardGroups: true
-    async: true
-  , (data, groups, out, callback) ->
-    if Buffer.isBuffer data
-      type = fileType data
-      unless type
-        return callback new Error 'Unsupported file type'
-      out.send type.mime
-      do callback
-      return
-    else if typeof data is 'string'
-      readChunk data, 0, 262, (error, buffer) ->
-        if error
-          return callback new Error 'Cannot read file'
-        type = fileType buffer
+      if Buffer.isBuffer data
+        type = fileType data
         unless type
-          return callback new Error 'Unsupported file type'
-        out.send type.mime
-        do callback
-        return
-    else
-      return callback new Error 'Input is not filepath nor buffer'
-
-  c
+          return output.sendDone new Error 'Unsupported file type'
+        return output.sendDone out: type.mime
+      else if typeof data is 'string'
+        readChunk data, 0, 262, (error, buffer) ->
+          if error
+            return output.sendDone new Error 'Cannot read file'
+          type = fileType buffer
+          unless type
+            return output.sendDone new Error 'Unsupported file type'
+          return output.sendDone out: type.mime
+      else
+        return output.sendDone new Error 'Input is not filepath nor buffer'
