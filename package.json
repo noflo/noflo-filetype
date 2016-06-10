@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "file-type": "^3.5.0",
-    "noflo": "~0.5.11",
+    "noflo": "~0.7.8",
     "read-chunk": "^1.0.1"
   },
   "devDependencies": {
