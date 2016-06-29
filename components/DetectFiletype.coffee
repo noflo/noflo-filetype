@@ -25,7 +25,8 @@ exports.getComponent = ->
     async: true
   , (data, groups, out, callback) ->
     if Buffer.isBuffer data
-      type = fileType data
+      chunk = if data.length >= 262 then data.slice 0, 262 else data
+      type = fileType chunk
       unless type
         return callback new Error 'Unsupported file type'
       out.send type.mime
@@ -43,5 +44,3 @@ exports.getComponent = ->
         return
     else
       return callback new Error 'Input is not filepath nor buffer'
-
-  c
