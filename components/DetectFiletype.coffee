@@ -20,27 +20,35 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: 'in'
-    out: 'out'
+    out: ['out', 'error']
     forwardGroups: true
     async: true
-  , (data, groups, out, callback) ->
+  , (data, groups, outPorts, callback) ->
     if Buffer.isBuffer data
       chunk = if data.length >= 262 then data.slice 0, 262 else data
       type = fileType chunk
       unless type
-        return callback new Error 'Unsupported file type'
-      out.send type.mime
+        outPorts.error.send new Error 'Unsupported file type'
+        do callback
+        return
+      outPorts.out.send type.mime
       do callback
       return
     else if typeof data is 'string'
       readChunk data, 0, 262, (error, buffer) ->
         if error
-          return callback new Error 'Cannot read file'
+          outPorts.error.send new Error 'Cannot read file'
+          do callback
+          return
         type = fileType buffer
         unless type
-          return callback new Error 'Unsupported file type'
-        out.send type.mime
+          outPorts.error.send new Error 'Unsupported file type'
+          do callback
+          return
+        outPorts.out.send type.mime
         do callback
         return
     else
-      return callback new Error 'Input is not filepath nor buffer'
+      outPorts.error.send new Error 'Input is not filepath nor buffer'
+      do callback
+      return
