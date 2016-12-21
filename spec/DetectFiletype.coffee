@@ -58,6 +58,21 @@ describe 'DetectFiletype component', ->
           done()
         testutils.getBuffer __dirname + '/fixtures/file.tif', (buffer) ->
           ins.send buffer
+    describe 'of a SVG file', ->
+      it 'should detect it has a SVG file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/svg+xml'
+          done()
+        testutils.getBuffer __dirname + '/fixtures/file.svg', (buffer) ->
+          ins.send buffer
+    describe 'of a WEBP file', ->
+      it 'should detect it has a WEBP file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/webp'
+          done()
+        testutils.getBuffer __dirname + '/fixtures/file.webp', (buffer) ->
+          ins.send buffer
+
     describe 'of a file without extension', ->
       it 'should detect it has a valid file type', (done) ->
         out.on 'data', (data) ->
@@ -99,6 +114,19 @@ describe 'DetectFiletype component', ->
           chai.expect(data).to.be.equal 'image/tiff'
           done()
         ins.send __dirname + '/fixtures/file.tif'
+    describe 'of a SVG file', ->
+      it 'should detect it has a SVG file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/svg+xml'
+          done()
+        ins.send __dirname + '/fixtures/file.svg'
+    describe 'of a WEBP file', ->
+      it 'should detect it has a WEBP file type', (done) ->
+        out.on 'data', (data) ->
+          chai.expect(data).to.be.equal 'image/webp'
+          done()
+        ins.send __dirname + '/fixtures/file.webp'
+
     describe 'of a file without extension', ->
       it 'should detect it has a valid file type', (done) ->
         out.on 'data', (data) ->
