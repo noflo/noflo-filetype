@@ -2,6 +2,13 @@ noflo = require 'noflo'
 fileType = require 'file-type'
 readChunk = require 'read-chunk'
 
+isSVG = (buffer) ->
+  # Try poor parsing it to see if it's a SVG
+  asString = buffer.toString()
+  if asString.match '<svg'
+    return true
+  return false
+
 exports.getComponent = ->
   c = new noflo.Component
 
@@ -28,6 +35,10 @@ exports.getComponent = ->
       chunk = if data.length >= 262 then data.slice 0, 262 else data
       type = fileType chunk
       unless type
+        if isSVG chunk
+          outPorts.out.send 'image/svg+xml'
+          do callback
+          return
         outPorts.error.send new Error 'Unsupported file type'
         do callback
         return
@@ -42,6 +53,10 @@ exports.getComponent = ->
           return
         type = fileType buffer
         unless type
+          if isSVG buffer
+            outPorts.out.send 'image/svg+xml'
+            do callback
+            return
           outPorts.error.send new Error 'Unsupported file type'
           do callback
           return
