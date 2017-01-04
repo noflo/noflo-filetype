@@ -2,6 +2,8 @@ noflo = require 'noflo'
 fileType = require 'file-type'
 readChunk = require 'read-chunk'
 
+# @runtime noflo-nodejs
+
 isSVG = (buffer) ->
   # Try poor parsing it to see if it's a SVG
   asString = buffer.toString()
