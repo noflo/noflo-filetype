@@ -18,7 +18,7 @@
   "dependencies": {
     "file-type": "~3.5.0",
     "noflo": "0.x >= 0.5",
-    "read-chunk": "~1.0.1"
+    "read-chunk": "~2.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
