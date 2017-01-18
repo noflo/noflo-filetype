@@ -29,43 +29,36 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: 'in'
-    out: ['out', 'error']
+    out: ['out']
     forwardGroups: true
     async: true
-  , (data, groups, outPorts, callback) ->
+  , (data, groups, out, callback) ->
     if Buffer.isBuffer data
       chunk = if data.length >= 262 then data.slice 0, 262 else data
       type = fileType chunk
       unless type
         if isSVG chunk
-          outPorts.out.send 'image/svg+xml'
+          out.send 'image/svg+xml'
           do callback
           return
-        outPorts.error.send new Error 'Unsupported file type'
-        do callback
-        return
-      outPorts.out.send type.mime
+        return callback new Error 'Unsupported file type'
+      out.send type.mime
       do callback
       return
     else if typeof data is 'string'
-      readChunk data, 0, 262, (error, buffer) ->
-        if error
-          outPorts.error.send new Error 'Cannot read file'
-          do callback
-          return
+      readChunk data, 0, 262
+      .then (buffer) ->
         type = fileType buffer
         unless type
           if isSVG buffer
-            outPorts.out.send 'image/svg+xml'
+            out.send 'image/svg+xml'
             do callback
             return
-          outPorts.error.send new Error 'Unsupported file type'
-          do callback
-          return
-        outPorts.out.send type.mime
+          return callback new Error 'Unsupported file type'
+        out.send type.mime
         do callback
         return
+      .catch (error) ->
+        callback new Error 'Cannot read file'
     else
-      outPorts.error.send new Error 'Input is not filepath nor buffer'
-      do callback
-      return
+      return callback new Error 'Input is not filepath nor buffer'
