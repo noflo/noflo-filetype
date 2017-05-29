@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "file-type": "~4.3.0",
-    "noflo": "0.x >= 0.5",
+    "noflo": "0.x >= 0.8",
     "read-chunk": "~2.0.0"
   },
   "devDependencies": {
