@@ -1,24 +1,31 @@
 noflo = require 'noflo'
 unless noflo.isBrowser()
   chai = require 'chai' unless chai
-  DetectFiletype = require '../components/DetectFiletype.coffee'
   testutils = require './testutils'
-else
-  DetectFiletype = require 'noflo-filetype/components/DetectFiletype.js'
+  path = require 'path'
+  baseDir = path.resolve __dirname, '../'
 
 describe 'DetectFiletype component', ->
   c = null
   ins = null
   out = null
   err = null
+  before (done) ->
+    loader = new noflo.ComponentLoader baseDir
+    loader.load 'filetype/DetectFiletype', (err, instance) ->
+      return done err if err
+      c = instance
+      ins = noflo.internalSocket.createSocket()
+      c.inPorts.in.attach ins
+      done()
   beforeEach ->
-    c = DetectFiletype.getComponent()
-    ins = noflo.internalSocket.createSocket()
     out = noflo.internalSocket.createSocket()
     err = noflo.internalSocket.createSocket()
-    c.inPorts.in.attach ins
     c.outPorts.out.attach out
     c.outPorts.error.attach err
+  afterEach ->
+    c.outPorts.out.detach out
+    c.outPorts.error.detach err
 
   describe 'when instantiated', ->
     it 'should have an input port', ->
