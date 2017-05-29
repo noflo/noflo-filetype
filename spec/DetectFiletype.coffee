@@ -83,7 +83,8 @@ describe 'DetectFiletype component', ->
     describe 'of a file with unsupported file type', ->
       it 'should fail with a valid error', (done) ->
         err.on 'data', (data) ->
-          chai.expect(data).to.be.deep.equal new Error 'Unsupported file type'
+          chai.expect(data).to.be.an 'error'
+          chai.expect(data.message).to.equal 'Unsupported file type'
           done()
         testutils.getBuffer __dirname + '/testutils.coffee', (buffer) ->
           ins.send buffer
@@ -136,14 +137,16 @@ describe 'DetectFiletype component', ->
     describe 'of a file with unsupported file type', ->
       it 'should fail with a valid error', (done) ->
         err.on 'data', (data) ->
-          chai.expect(data).to.be.deep.equal new Error 'Unsupported file type'
+          chai.expect(data).to.be.an 'error'
+          chai.expect(data.message).to.equal 'Unsupported file type'
           done()
         ins.send __dirname + '/testutils.coffee'
 
   describe 'when passed neither a buffer nor filepath', ->
     it 'should fail with a valid error', (done) ->
       err.on 'data', (data) ->
-        chai.expect(data).to.deep.equal new Error 'Input is not filepath nor buffer'
+        chai.expect(data).to.be.an 'error'
+        chai.expect(data.message).to.equal 'Input is not filepath nor buffer'
         done()
       ins.send 42
 
