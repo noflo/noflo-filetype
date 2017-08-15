@@ -16,7 +16,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "file-type": "^5.2.0",
+    "file-type": "^6.1.0",
     "noflo": "0.x >= 0.8",
     "read-chunk": "~2.1.0"
   },
