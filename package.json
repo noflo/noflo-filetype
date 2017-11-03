@@ -13,20 +13,18 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "grunt test"
+    "pretest": "coffeelint -f .coffeelint.json -r components",
+    "test": "mocha --require coffeescript/register -R spec -t 2000 spec/*.coffee"
   },
   "dependencies": {
     "file-type": "^7.0.1",
-    "noflo": "0.x >= 0.8",
+    "noflo": "^1.0.0",
     "read-chunk": "~2.1.0"
   },
   "devDependencies": {
     "chai": "^4.0.0",
-    "grunt": "^1.0.1",
-    "grunt-coffeelint": "^0.0.16",
-    "grunt-contrib-coffee": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-mocha-test": "^0.13.2",
+    "coffeescript": "^2.0.2",
+    "coffeelint": "^2.0.7",
     "mocha": "^4.0.0"
   },
   "keywords": [
