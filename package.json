@@ -17,7 +17,7 @@
     "test": "mocha --require coffeescript/register -R spec -t 2000 spec/*.coffee"
   },
   "dependencies": {
-    "file-type": "^10.0.0",
+    "file-type": "^14.6.0",
     "noflo": "^1.0.0",
     "read-chunk": "~3.1.0"
   },
