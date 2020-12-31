@@ -94,7 +94,7 @@ describe('DetectFiletype component', () => {
         chai.expect(data.message).to.equal('Unsupported file type');
         done();
       });
-      testutils.getBuffer(`${__dirname}/testutils.coffee`, (buffer) => ins.send(buffer));
+      testutils.getBuffer(`${__dirname}/testutils.js`, (buffer) => ins.send(buffer));
     }));
   });
 
@@ -156,7 +156,7 @@ describe('DetectFiletype component', () => {
         chai.expect(data.message).to.equal('Unsupported file type');
         done();
       });
-      ins.send(`${__dirname}/testutils.coffee`);
+      ins.send(`${__dirname}/testutils.js`);
     }));
   });
 
