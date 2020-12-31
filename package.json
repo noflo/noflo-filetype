@@ -17,7 +17,7 @@
     "test": "mocha -R spec -t 2000 spec/*.js"
   },
   "dependencies": {
-    "file-type": "^11.0.0",
+    "file-type": "^16.1.0",
     "noflo": "^1.0.0",
     "read-chunk": "~3.1.0"
   },
