@@ -36,21 +36,23 @@ exports.getComponent = function () {
     const data = input.getData('in');
 
     if (Buffer.isBuffer(data)) {
-      const chunk = data.length >= 262 ? data.slice(0, 262) : data;
-      type = fileType(chunk);
-      if (!type) {
-        if (isSVG(chunk)) {
-          output.sendDone({ out: 'image/svg+xml' });
-          return;
-        }
-        output.done(new Error('Unsupported file type'));
-        return;
-      }
-      output.sendDone({ out: type.mime });
+      fileType.fromBuffer(data)
+        .then((type) => {
+          if (!type) {
+            if (isSVG(chunk)) {
+              output.sendDone({ out: 'image/svg+xml' });
+              return;
+            }
+            output.done(new Error('Unsupported file type'));
+            return;
+          }
+          output.sendDone({ out: type.mime });
+        }, output.done);
+      return;
     } else if (typeof data === 'string') {
       readChunk(data, 0, 262)
-        .then((buffer) => {
-          type = fileType(buffer);
+        .then((buffer) => fileType.fromBuffer(buffer))
+        .then((type) => {
           if (!type) {
             if (isSVG(buffer)) {
               output.sendDone({ out: 'image/svg+xml' });
